@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Control Panel — Maa Kali Enterprises</title>
+<style>
+  :root{
+    --ink:#1d2836; --muted:#64748b; --line:#e2e8f0;
+    --bg:#0f2a47; --bg2:#f4f6f9; --card:#ffffff;
+    --brand:#0f2a47; --gold:#c9971c; --green:#1e7e46; --red:#c0392b;
+    --r:14px; --sh:0 10px 30px rgba(15,42,71,.10);
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg2);color:var(--ink);line-height:1.55}
+  a{color:var(--brand)}
+  /* ---- Top bar ---- */
+  header{background:linear-gradient(120deg,#0f2a47,#1b3d61);color:#fff;padding:16px 24px;display:flex;align-items:center;gap:14px;position:sticky;top:0;z-index:40}
+  header .mark{width:40px;height:40px;border-radius:10px;background:var(--gold);color:#0f2a47;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:19px}
+  header h1{font-size:18px;font-weight:800;letter-spacing:.2px}
+  header p{font-size:12px;color:#c9d6e4}
+  header .site-link{margin-left:auto;color:#fff;text-decoration:none;font-size:13px;font-weight:700;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:8px 14px;border-radius:9px}
+  header .site-link:hover{background:rgba(255,255,255,.25)}
+  /* ---- Tabs ---- */
+  .tabs{position:sticky;top:72px;z-index:30;background:#fff;border-bottom:1px solid var(--line);display:flex;gap:2px;padding:0 16px;overflow-x:auto}
+  .tab{appearance:none;border:0;background:none;font-family:inherit;font-size:14px;font-weight:700;color:var(--muted);padding:13px 14px;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+  .tab:hover{color:var(--ink)}
+  .tab.active{color:var(--brand);border-bottom-color:var(--gold)}
+  /* ---- Layout / panels ---- */
+  main{max-width:1080px;margin:26px auto;padding:0 18px 90px}
+  .panel{display:none;animation:fade .18s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+  h2.pt{font-size:19px;font-weight:800;margin:4px 0 3px}
+  .sub{color:var(--muted);font-size:13.5px;margin-bottom:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;margin-bottom:18px;box-shadow:var(--sh)}
+  .card h3{font-size:14px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin-bottom:12px}
+  label.fl{display:block;font-size:12.5px;font-weight:700;color:var(--muted);margin:0 0 5px}
+  input[type=text],input[type=number],input[type=email],input[type=url],select,textarea{width:100%;font-family:inherit;font-size:14px;color:var(--ink);padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:#fbfcfe}
+  input:focus,textarea:focus,select:focus{outline:2px solid rgba(201,151,28,.35);border-color:var(--gold)}
+  textarea{resize:vertical;min-height:64px}
+  .grid{display:grid;gap:12px}
+  .g2{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(3,1fr)} .g4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:680px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  .field{margin-bottom:4px}
+  .hint{font-size:11.5px;color:var(--muted);margin-top:4px}
+  /* buttons */
+  .btn{appearance:none;border:0;cursor:pointer;font-family:inherit;font-weight:800;font-size:13px;border-radius:9px;padding:10px 15px;transition:transform .06s ease}
+  .btn:active{transform:scale(.98)}
+  .btn-primary{background:var(--brand);color:#fff}
+  .btn-gold{background:var(--gold);color:#fff}
+  .btn-ghost{background:#fff;border:1px solid var(--line);color:var(--ink)}
+  .btn-danger{background:#fdeceb;border:1px solid #f3c5bd;color:var(--red)}
+  .btn-sm{padding:6px 10px;font-size:12px}
+  .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:6px 0 18px}
+  .spacer{flex:1}
+  /* toggle */
+  .switch{display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:700;color:var(--muted);user-select:none}
+  .switch input{width:36px;height:20px;appearance:none;background:#cbd5e1;border-radius:99px;position:relative;cursor:pointer;transition:background .15s;margin:0;padding:0}
+  .switch input:checked{background:var(--green)}
+  .switch input::after{content:"";position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:#fff;transition:left .15s}
+  .switch input:checked::after{left:19px}
+  /* dashboard stat cards */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  @media(max-width:760px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--sh)}
+  .stat .num{font-size:24px;font-weight:800;color:var(--brand)}
+  .stat .lbl{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+  .stat .ic{font-size:20px}
+  /* theme swatch rows */
+  .swatch-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+  .swatch-row:last-child{border-bottom:0}
+  .swatch-row .name{flex:1;font-size:13.5px;font-weight:700}
+  .swatch-row .desc{flex:1.6;font-size:12px;color:var(--muted)}
+  input[type=color]{width:42px;height:32px;border:1px solid var(--line);border-radius:8px;padding:0;background:#fff;cursor:pointer}
+  input[type=color]::-webkit-color-swatch-wrapper{padding:2px}
+  input[type=color]::-webkit-color-swatch{border:0;border-radius:6px}
+  .hex{width:78px;font-size:12px;text-transform:uppercase}
+  .presets{display:flex;flex-wrap:wrap;gap:10px}
+  .preset{cursor:pointer;border:2px solid transparent;border-radius:12px;overflow:hidden;width:118px;background:#fff;border:1px solid var(--line)}
+  .preset:hover{border-color:var(--gold)}
+  .preset .bars{display:flex;height:44px}
+  .preset .bars i{flex:1}
+  .preset b{display:block;font-size:11.5px;padding:6px 8px;font-weight:800}
+  /* product editor */
+  .prod{border:1px solid var(--line);border-radius:12px;background:#fbfcfe;margin-bottom:12px;overflow:hidden}
+  .prod-head{display:flex;align-items:center;gap:12px;padding:10px 12px;cursor:pointer}
+  .prod-head img{width:46px;height:46px;object-fit:cover;border-radius:9px;border:1px solid var(--line);background:#fff}
+  .prod-head .ttl{font-weight:800;font-size:14px}
+  .prod-head .meta{font-size:12px;color:var(--muted)}
+  .prod-head .caret{margin-left:auto;color:var(--muted);transition:transform .15s}
+  .prod.open .caret{transform:rotate(90deg)}
+  .prod-body{display:none;padding:14px;border-top:1px solid var(--line);background:#fff}
+  .prod.open .prod-body{display:block}
+  /* orders */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:left;padding:8px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted)}
+  .pill{display:inline-block;background:#eef2f7;border-radius:99px;padding:2px 9px;font-size:11.5px;font-weight:700}
+  /* toast */
+  #toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(140%);background:#13283f;color:#fff;padding:11px 18px;border-radius:10px;font-size:13.5px;font-weight:700;box-shadow:0 12px 30px rgba(0,0,0,.3);transition:transform .2s ease;z-index:80}
+  #toast.show{transform:translateX(-50%) translateY(0)}
+  #toast.ok{background:var(--green)} #toast.err{background:var(--red)}
+  .mini-img{width:64px;height:64px;border-radius:10px;object-fit:cover;border:1px solid var(--line);background:#fff}
+  .img-edit{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="mark">🎛️</div>
+  <div>
+    <h1 id="panelTitle">Website Control Panel</h1>
+    <p>No code. Change anything — it goes live instantly.</p>
+  </div>
+  <a class="site-link" href="/" target="_blank">↗ View Live Site</a>
+</header>
+
+<nav class="tabs" id="tabs">
+  <button class="tab active" data-tab="dashboard">🏠 Dashboard</button>
+  <button class="tab" data-tab="theme">🎨 Colours & Theme</button>
+  <button class="tab" data-tab="products">🛍️ Products</button>
+  <button class="tab" data-tab="photos">🖼️ Photos</button>
+  <button class="tab" data-tab="content">✏️ Text & Contact</button>
+  <button class="tab" data-tab="orders">📦 Orders</button>
+</nav>
+
+<main>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="panel active" id="panel-dashboard">
+    <h2 class="pt">Dashboard</h2>
+    <p class="sub">A quick health check of your store, then jump into whatever you want to change.</p>
+    <div class="stats" id="dashStats"></div>
+    <div class="card" style="margin-top:18px">
+      <h3>Quick actions</h3>
+      <div class="toolbar">
+        <button class="btn btn-gold" data-go="theme">🎨 Change colours</button>
+        <button class="btn btn-gold" data-go="products">🛍️ Edit a product / price</button>
+        <button class="btn btn-gold" data-go="photos">🖼️ Swap a photo</button>
+        <button class="btn btn-gold" data-go="content">✏️ Edit texts & contact</button>
+        <button class="btn btn-gold" data-go="orders">📦 See orders</button>
+      </div>
+      <p class="hint" id="dashOrdersHint">Everything you save here is written to <b>data.json</b> on the server — the live site picks it up instantly.</p>
+    </div>
+    <div class="card">
+      <h3>Latest orders</h3>
+      <div id="dashOrders"><p class="hint">Loading…</p></div>
+    </div>
+  </section>
+
+  <!-- ============ THEME / COLOURS ============ -->
+  <section class="panel" id="panel-theme">
+    <h2 class="pt">🎨 Colours & Theme</h2>
+    <p class="sub">Pick a ready-made look in one click, or fine-tune every colour and font. Preview instantly, then publish.</p>
+
+    <div class="card">
+      <h3>One-click looks</h3>
+      <div class="presets" id="presets"></div>
+      <p class="hint">Clicking a look only <b>previews</b> it — nothing is published until you press <b>Publish Theme</b>.</p>
+    </div>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Main colours</h3>
+        <div id="colorFields"></div>
+      </div>
+      <div>
+        <div class="card">
+          <h3>Fonts</h3>
+          <div class="field"><label class="fl">Heading font</label><select id="f-headingFont"></select></div>
+          <div class="field"><label class="fl">Body font</label><select id="f-bodyFont"></select></div>
+          <p class="hint">Fonts use safe system stacks so the site always loads fast.</p>
+        </div>
+        <div class="card">
+          <h3>🔍 Live preview</h3>
+          <iframe id="preview" src="/" style="width:100%;height:280px;border:1px solid var(--line);border-radius:10px;background:#fff"></iframe>
+          <div class="toolbar" style="margin:10px 0 0">
+            <button class="btn btn-ghost btn-sm" id="refreshPreview">↻ Refresh preview</button>
+            <span class="hint">Shows your <b>unsaved</b> changes after a click.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" id="publishTheme">✅ Publish Theme</button>
+      <button class="btn btn-ghost" id="resetTheme">Reset to saved</button>
+      <div class="spacer"></div>
+      <span class="hint" id="themeStatus"></span>
+    </div>
+  </section>
+
+  <!-- ============ PRODUCTS ============ -->
+  <section class="panel" id="panel-products">
+    <h2 class="pt">🛍️ Products & Prices</h2>
+    <p class="sub">Add products, change names, prices, categories and descriptions. Nothing here edits code.</p>
+    <div class="toolbar">
+      <button class="btn btn-gold" id="addProduct">＋ Add new product</button>
+      <div class="spacer"></div>
+      <input type="text" id="prodSearch" placeholder="🔎 Filter products…" style="max-width:240px">
+    </div>
+    <div id="prodList"></div>
+    <div class="toolbar">
+      <button class="btn btn-primary" id="saveProducts">✅ Save all products</button>
+      <span class="hint" id="prodStatus"></span>
+    </div>
+  </section>
+
+  <!-- ============ PHOTOS ============ -->
+  <section class="panel" id="panel-photos">
+    <h2 class="pt">🖼️ Photos & Images</h2>
+    <p class="sub">Replace the hero banner and every product photo. Upload a JPG, PNG or WEBP (up to 8&nbsp;MB). The old photo is overwritten.</p>
+    <div class="card">
+      <h3>Site banner</h3>
+      <div class="img-edit">
+        <img class="mini-img" id="img-hero" src="images/hero.jpg" alt="hero">
+        <div style="flex:1"><label class="fl">Hero banner image <b>(hero)</b></label>
+        <input type="file" accept="image/*" data-slot="hero" class="upl"><p class="hint">Shown at the very top of the homepage.</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Product photos</h3>
+      <div id="photoSlots"></div>
+    </div>
+  </section>
+
+  <!-- ============ CONTENT / TEXT / CONTACT ============ -->
+  <section class="panel" id="panel-content">
+    <h2 class="pt">✏️ Text, Brand & Contact</h2>
+    <p class="sub">The words, promo bar and contact details your customers see.</p>
+
+    <div class="card">
+      <h3>Brand</h3>
+      <div class="grid g2">
+        <div class="field"><label class="fl">Site name</label><input type="text" id="s-siteName"></div>
+        <div class="field"><label class="fl">Tagline (shown in tab title)</label><input type="text" id="s-tagline"></div>
+      </div>
+      <div class="field"><label class="fl">Hero main heading</label><input type="text" id="s-heroTitle"></div>
+      <div class="field"><label class="fl">Hero sub-heading</label><input type="text" id="s-heroSub"></div>
+    </div>
+
+    <div class="card">
+      <h3>Announcement bar (top of every page)</h3>
+      <label class="switch"><input type="checkbox" id="s-announceEnabled" checked> Show the bar</label>
+      <div class="field" style="margin-top:10px"><label class="fl">Announcement text <span class="hint">(you can use &lt;b&gt;bold&lt;/b&gt;)</span></label><textarea id="s-announcement"></textarea></div>
+    </div>
+
+    <div class="card">
+      <h3>Promo code & shipping</h3>
+      <div class="grid g4">
+        <div class="field"><label class="fl">Promo code</label><input type="text" id="s-promoCode"></div>
+        <div class="field"><label class="fl">Discount %</label><input type="number" id="s-promoPct" min="0" max="100"></div>
+        <div class="field"><label class="fl">Free shipping over (₹)</label><input type="number" id="s-freeShipThreshold" min="0"></div>
+        <div class="field"><label class="fl">Flat shipping (₹)</label><input type="number" id="s-shipFlat" min="0"></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Contact (shown on the site footer / contact section)</h3>
+      <div class="grid g2">
+        <div class="field"><label class="fl">Store address</label><textarea id="s-contactAddress"></textarea></div>
+        <div>
+          <div class="field"><label class="fl">Phone</label><input type="text" id="s-contactPhone"></div>
+          <div class="field"><label class="fl">Email</label><input type="email" id="s-contactEmail"></div>
+          <div class="field"><label class="fl">Opening hours</label><input type="text" id="s-contactHours"></div>
+        </div>
+      </div>
+      <div class="field" style="margin-top:8px"><label class="fl">Footer “about” line</label><input type="text" id="s-footerNote"></div>
+    </div>
+
+    <div class="toolbar">
+      <button class="btn btn-primary" id="saveContent">✅ Publish text & contact</button>
+      <span class="hint" id="contentStatus"></span>
+    </div>
+  </section>
+
+  <!-- ============ ORDERS ============ -->
+  <section class="panel" id="panel-orders">
+    <h2 class="pt">📦 Orders</h2>
+    <p class="sub">Every checkout lands here. Sorted newest-first. Customer details included.</p>
+    <div class="toolbar">
+      <button class="btn btn-ghost btn-sm" id="reloadOrders">↻ Refresh</button>
+      <div class="spacer"></div>
+      <button class="btn btn-danger btn-sm" id="clearOrders">🗑 Clear all orders</button>
+    </div>
+    <div class="card" style="padding:0">
+      <div style="overflow-x:auto">
+        <table id="ordersTable">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Items</th><th>Payment</th><th>Total</th><th>Date</th></tr></thead>
+          <tbody><tr><td colspan="6" class="hint" style="padding:18px">Loading…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<div id="toast"></div>
+
+<script>
+/* ================= helpers ================= */
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s==null?"":s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const fmt = (n) => "₹" + Number(n||0).toLocaleString("en-IN");
+async function api(url, opts){
+  const r = await fetch(url, opts);
+  if(!r.ok) throw new Error(url + " → " + r.status);
+  const ct = r.headers.get("content-type")||"";
+  return ct.includes("json") ? r.json() : r.text();
+}
+function toast(msg, kind){
+  const t=$("toast"); t.textContent=msg; t.className="show "+(kind||"");
+  setTimeout(()=>t.className="", 2200);
+}
+
+/* ================= state ================= */
+let DATA = null;          // {settings, products}
+const SKEY = "mke_draft_theme";
+
+/* ================= tabs ================= */
+$("tabs").addEventListener("click", e=>{
+  const b = e.target.closest(".tab"); if(!b) return;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active", t===b));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active", p.id==="panel-"+b.dataset.tab));
+});
+document.addEventListener("click", e=>{
+  const g = e.target.closest("[data-go]"); if(!g) return;
+  document.querySelector('.tab[data-tab="'+g.dataset.go+'"]').click();
+});
+
+/* ================= load data ================= */
+async function loadAll(){
+  DATA = await api("/api/data");
+  document.title = "Control Panel — " + (DATA.settings.siteName||"");
+  $('panelTitle').textContent = (DATA.settings.siteName||"Store") + " — Control Panel";
+  buildTheme(); buildProducts(); buildPhotos(); fillContent(); renderDashboard(); loadOrders();
+}
+
+/* ================= DASHBOARD ================= */
+function renderDashboard(){
+  const s = DATA.settings, ps = DATA.products;
+  const ordersCache = window._ordersCount || 0;
+  const stats = [
+    ["🛍️", ps.length, "Products live"],
+    ["🖼️", ps.length + 1, "Images you control"],
+    ["🏷️", (s.promoCode||"—")+" ("+ (s.promoPct||0) +"% off)", "Active promo"],
+    ["📦", ordersCache, "Orders received"],
+  ];
+  $("dashStats").innerHTML = stats.map(st=>`
+    <div class="stat"><div class="ic">${st[0]}</div><div class="num">${st[1]}</div><div class="lbl">${st[2]}</div></div>`).join("");
+}
+async function loadOrders(){
+  let rows;
+  try{ rows = await api("/api/orders"); }catch(e){ rows = []; }
+  window._ordersCount = rows.length;
+  renderDashboard();
+  const body = $("ordersTable").querySelector("tbody");
+  if(!rows.length){
+    body.innerHTML = `<tr><td colspan="6" class="hint" style="padding:18px">No orders yet — they appear here the moment a customer checks out.</td></tr>`;
+    $("dashOrders").innerHTML = `<p class="hint">Nothing yet. Orders show up here and in the Orders tab.</p>`;
+    return;
+  }
+  const rowHTML = o => `<tr>
+      <td><b>${esc(o.id)}</b></td>
+      <td>${esc(o.customer?.name||"")}<div class="hint">${esc(o.customer?.phone||"")} · ${esc(o.customer?.city||o.customer?.address||"")}</div></td>
+      <td>${(o.items||[]).map(it=>esc(it.name)+" ×"+it.qty).join("<br>")}</td>
+      <td><span class="pill">${esc(o.payment?.method||o.payment?.label||"—")}</span></td>
+      <td><b>${fmt(o.total)}</b></td>
+      <td class="hint">${esc((o.date||o.placed||"").toString().slice(0,16))}</td>
+    </tr>`;
+  body.innerHTML = rows.map(rowHTML).join("");
+  $("dashOrders").innerHTML = `<table><thead><tr><th>ID</th><th>Customer</th><th>Items</th><th>Total</th><th>Date</th></tr></thead><tbody>${rows.slice(0,5).map(rowHTML).join("")}</tbody></table>`;
+}
+$("reloadOrders").onclick = loadOrders;
+$("clearOrders").onclick = async ()=>{
+  if(!confirm("Delete ALL stored orders? This cannot be undone.")) return;
+  try{ await api("/api/orders/clear",{method:"POST"}); toast("Orders cleared","ok"); loadOrders(); }
+  catch(e){ toast("Could not clear orders","err"); }
+};
+
+/* ================= THEME / COLOURS ================= */
+const COLOR_DEFS = [
+  ["primary",    "Main brand colour", "Navigation, buttons, headlines accents"],
+  ["accent",     "Accent colour",     "Star ratings, badges, highlights, links"],
+  ["body",       "Text colour",       "All paragraph / body text"],
+  ["bg",         "Page background",   "Soft background behind everything"],
+  ["bannerStart","Hero banner (top)", "Top colour of the homepage banner"],
+  ["bannerEnd",  "Hero banner (bottom)","Bottom of the banner gradient"],
+  ["btnText",    "Button text colour","Text on coloured buttons"],
+  ["announceBg", "Announcement bar",  "Background of the top promo bar (optional)"],
+];
+const PRESETS = [
+  {name:"Classy Navy & Gold",   theme:{primary:"#0f2a47",accent:"#c9971c",body:"#1d2836",bg:"#f4f6f9",bannerStart:"#eef2f7",bannerEnd:"#ffffff",btnText:"#f3ecd9",announceBg:"#0f2a47"}},
+  {name:"Forest & Cream",       theme:{primary:"#134e3a",accent:"#b9803f",body:"#22302a",bg:"#f4f2ea",bannerStart:"#e9f0ea",bannerEnd:"#fdfaf3",btnText:"#ffffff",announceBg:"#134e3a"}},
+  {name:"Berry Luxe",           theme:{primary:"#6b2146",accent:"#c98a2c",body:"#2e2530",bg:"#f8f3f2",bannerStart:"#f6ecf1",bannerEnd:"#ffffff",btnText:"#fff7fb",announceBg:"#6b2146"}},
+  {name:"Terracotta",           theme:{primary:"#8a3b1c",accent:"#d99a4e",body:"#352a24",bg:"#faf5f0",bannerStart:"#f6ece2",bannerEnd:"#ffffff",btnText:"#fff7f0",announceBg:"#8a3b1c"}},
+  {name:"Midnight & Mint",      theme:{primary:"#17253a",accent:"#3fae96",body:"#222b38",bg:"#f2f5f6",bannerStart:"#e9eef1",bannerEnd:"#ffffff",btnText:"#ffffff",announceBg:"#17253a"}},
+  {name:"Sunrise Pop",          theme:{primary:"#233043",accent:"#f2784b",body:"#2b3038",bg:"#fbf6f3",bannerStart:"#f9ebe3",bannerEnd:"#ffffff",btnText:"#ffffff",announceBg:"#233043"}},
+];
+const FONT_OPTS = [
+  ["Georgia, 'Times New Roman', serif", "Elegant serif (Georgia)"],
+  ["'Palatino Linotype', 'Book Antiqua', Palatino, serif", "Classic serif (Palatino)"],
+  ["-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif", "Modern sans (System)"],
+  ["'Trebuchet MS', 'Lucida Grande', 'Lucida Sans', sans-serif", "Friendly sans (Trebuchet)"],
+  ["'Helvetica Neue', Helvetica, Arial, sans-serif", "Clean sans (Helvetica)"],
+  ["Verdana, Geneva, Tahoma, sans-serif", "Roomy sans (Verdana)"],
+];
+function currentTheme(){ return JSON.parse(JSON.stringify(DATA.settings.theme||{})); }
+
+function buildTheme(){
+  const t = JSON.parse(localStorage.getItem(SKEY)) || currentTheme();
+  // colour fields
+  $("colorFields").innerHTML = COLOR_DEFS.map(([k,name,desc])=>`
+    <div class="swatch-row">
+      <input type="color" id="c-${k}" value="${normHex(t[k]||"#000000")}">
+      <input type="text" class="hex" id="h-${k}" value="${(t[k]||"").toUpperCase()}" maxlength="7">
+      <div><div class="name">${name}</div><div class="desc">${desc}</div></div>
+    </div>`).join("");
+  COLOR_DEFS.forEach(([k])=>{
+    $("c-"+k).oninput = e=>{ $("h-"+k).value = e.target.value.toUpperCase(); };
+    $("h-"+k).oninput = e=>{ const v=e.target.value.trim(); if(/^#([0-9a-fA-F]{6})$/.test(v)) $("c-"+k).value=v; };
+  });
+  // font selects
+  const fh=$("f-headingFont"), fb=$("f-bodyFont");
+  fh.innerHTML = FONT_OPTS.map(([v,l])=>`<option value="${esc(v)}">${esc(l)}</option>`).join("");
+  fb.innerHTML = fh.innerHTML;
+  fh.value = t.headingFont || FONT_OPTS[0][0];
+  fb.value = t.bodyFont    || FONT_OPTS[2][0];
+  // presets
+  $("presets").innerHTML = PRESETS.map((p,i)=>`
+    <div class="preset" data-i="${i}">
+      <div class="bars"><i style="background:${p.theme.primary}"></i><i style="background:${p.theme.accent}"></i><i style="background:${p.theme.bg}"></i></div>
+      <b>${p.name}</b>
+    </div>`).join("");
+  document.querySelectorAll(".preset").forEach(el=>el.onclick=()=>{ applyPreset(PRESETS[+el.dataset.i].theme); });
+  $("publishTheme").onclick = publishTheme;
+  $("resetTheme").onclick = ()=>{ localStorage.removeItem(SKEY); buildTheme(); toast("Back to the saved look","ok"); };
+  $("refreshPreview").onclick = ()=>{ $("preview").src = "/" + "?_=" + Date.now(); };
+  // preview behaviour: push draft into iframe via query + localStorage
+}
+function normHex(v){ if(/^#([0-9a-fA-F]{6})$/.test(v)) return v;
+  const s=v.replace("#",""); if(/^([0-9a-fA-F]{6})$/.test(s)) return "#"+s; return "#000000"; }
+function readThemeForm(){
+  const t = {};
+  COLOR_DEFS.forEach(([k])=> t[k] = $("h-"+k).value.trim() || $("c-"+k).value);
+  t.headingFont = $("f-headingFont").value;
+  t.bodyFont = $("f-bodyFont").value;
+  return t;
+}
+function applyPreset(theme){
+  COLOR_DEFS.forEach(([k])=>{ if(theme[k]){ $("h-"+k).value=theme[k].toUpperCase(); $("c-"+k).value=normHex(theme[k]); } });
+  localStorage.setItem(SKEY, JSON.stringify(readThemeForm()));
+  toast("Previewing “" + (theme.name||"look") + "” — press Publish Theme to go live","ok");
+}
+async function publishTheme(){
+  DATA.settings.theme = Object.assign({}, DATA.settings.theme, readThemeForm());
+  try{
+    await api("/api/data",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(DATA)});
+    localStorage.removeItem(SKEY);
+    $("themeStatus").textContent = "Published " + new Date().toLocaleTimeString();
+    toast("✅ New look is live!","ok");
+    $("preview").src = "/?_" + Date.now();
+  }catch(e){ toast("Save failed","err"); }
+}
+
+/* ================= PRODUCTS ================= */
+function productCard(p){
+  return `<div class="prod" data-id="${esc(p.id)}">
+    <div class="prod-head">
+      <img src="images/${esc(p.id)}.jpg" onerror="this.src='images/placeholder.jpg'" alt="">
+      <div><div class="ttl">${esc(p.name)}</div><div class="meta">${esc(p.cat||"")} · <b>${fmt(p.price)}</b>${p.mrp||p.old?` <s>${fmt(p.mrp||p.old)}</s>`:""}</div></div>
+      <span class="caret">▶</span>
+    </div>
+    <div class="prod-body">
+      <div class="grid g3">
+        <div class="field"><label class="fl">Product name</label><input type="text" class="p-name" value="${esc(p.name)}"></div>
+        <div class="field"><label class="fl">Category</label><input type="text" class="p-cat" value="${esc(p.cat||"")}"></div>
+        <div class="field"><label class="fl">Badge (optional, e.g. “Best Seller”)</label><input type="text" class="p-badge" value="${esc(p.badge||"")}"></div>
+        <div class="field"><label class="fl">Sale price (₹)</label><input type="number" class="p-price" min="0" value="${p.price||0}"></div>
+        <div class="field"><label class="fl">Original MRP (₹, shows discount)</label><input type="number" class="p-mrp" min="0" value="${p.mrp||p.old||0}"></div>
+        <div class="field"><label class="fl">Rating (0–5)</label><input type="number" class="p-rating" step="0.1" min="0" max="5" value="${p.rating||0}"></div>
+      </div>
+      <div class="field"><label class="fl">Short description</label><textarea class="p-desc">${esc(p.desc||p.description||"")}</textarea></div>
+      <div class="field"><label class="fl">Feature bullets <span class="hint">(one per line)</span></label><textarea class="p-features">${esc((p.features||[]).join("\n"))}</textarea></div>
+      <div class="toolbar">
+        <div class="img-edit" style="flex:1">
+          <img class="mini-img" data-slotprev="${esc(p.id)}" src="images/${esc(p.id)}.jpg" onerror="this.src='images/placeholder.jpg'">
+          <div><label class="fl">Photo</label><input type="file" accept="image/*" class="upl" data-slot="${esc(p.id)}"></div>
+        </div>
+        <button class="btn btn-danger btn-sm act-del">🗑 Delete product</button>
+      </div>
+    </div>
+  </div>`;
+}
+function buildProducts(){
+  $("prodList").innerHTML = DATA.products.map(productCard).join("");
+  document.querySelectorAll(".prod-head").forEach(h=>h.onclick=()=>h.parentElement.classList.toggle("open"));
+  document.querySelectorAll(".act-del").forEach(b=>b.onclick=()=>{
+    const card=b.closest(".prod"); const id=card.dataset.id;
+    if(confirm("Delete this product?")){ DATA.products = DATA.products.filter(p=>p.id!==id); buildProducts(); toast("Removed — press Save all products","ok"); }
+  });
+  document.querySelectorAll("#prodList .upl").forEach(wireUploader);
+  $("prodSearch").oninput = e=>{
+    const q=e.target.value.toLowerCase();
+    document.querySelectorAll(".prod").forEach(c=>c.style.display=(c.dataset.id+ " "+c.querySelector(".ttl").textContent).toLowerCase().includes(q)?"":"none");
+  };
+}
+$("addProduct").onclick = ()=>{
+  const id = "item-" + Math.random().toString(36).slice(2,7);
+  DATA.products.push({id, name:"New Product", cat:"New", price:0, mrp:0, rating:0, reviews:0, desc:"", features:[]});
+  buildProducts();
+  const card = document.querySelector(`.prod[data-id="${id}"]`); if(card){card.classList.add("open"); card.scrollIntoView({behavior:"smooth",block:"center"});}
+  toast("New product added — fill it in, upload a photo, then Save","ok");
+};
+$("saveProducts").onclick = async ()=>{
+  const updated = [...DATA.products];
+  document.querySelectorAll(".prod").forEach(card=>{
+    const p = updated.find(x=>x.id===card.dataset.id); if(!p) return;
+    p.name  = card.querySelector(".p-name").value.trim();
+    p.cat   = card.querySelector(".p-cat").value.trim();
+    p.badge = card.querySelector(".p-badge").value.trim();
+    p.price = +card.querySelector(".p-price").value || 0;
+    p.mrp   = +card.querySelector(".p-mrp").value || 0; delete p.old;
+    p.rating= +card.querySelector(".p-rating").value || 0;
+    p.desc  = card.querySelector(".p-desc").value.trim(); delete p.description;
+    p.features = card.querySelector(".p-features").value.split("\n").map(s=>s.trim()).filter(Boolean);
+  });
+  DATA.products = updated;
+  try{
+    await api("/api/data",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(DATA)});
+    $("prodStatus").textContent = "Saved " + new Date().toLocaleTimeString();
+    toast("✅ Products are live!","ok");
+    buildPhotos();               // refresh photo slots (new products have slots now)
+  }catch(e){ toast("Save failed","err"); }
+};
+
+/* ================= PHOTOS ================= */
+function buildPhotos(){
+  $("photoSlots").innerHTML = DATA.products.map(p=>`
+    <div class="img-edit" style="padding:10px 0;border-bottom:1px dashed var(--line)">
+      <img class="mini-img" src="images/${esc(p.id)}.jpg" onerror="this.src='images/placeholder.jpg'">
+      <div style="flex:1"><label class="fl">${esc(p.name)} <b>(${esc(p.id)})</b></label>
+      <input type="file" accept="image/*" class="upl" data-slot="${esc(p.id)}"></div>
+    </div>`).join("");
+  document.querySelectorAll("#panel-photos .upl").forEach(wireUploader);
+  document.querySelectorAll("#panel-photos img,#img-hero").forEach(im=>{ im.src = im.src.split("?")[0] + "?t=" + Date.now(); });
+}
+function wireUploader(input){
+  input.onchange = async ()=>{
+    const f = input.files[0]; if(!f) return;
+    if(f.size > 8*1024*1024){ toast("Image too big (max 8 MB)","err"); input.value=""; return; }
+    const slot = input.dataset.slot;
+    toast("Uploading “" + slot + "”…");
+    try{
+      await api("/api/upload?slot=" + encodeURIComponent(slot), {method:"POST", body:f});
+      // refresh any previews bound to this slot
+      document.querySelectorAll(`img[src^="images/${slot}.jpg"],[data-slotprev="${slot}"]`).forEach(im=>{ im.src="images/"+slot+".jpg?t="+Date.now(); });
+      if(slot==="hero") $("img-hero").src="images/hero.jpg?t="+Date.now();
+      toast("✅ “" + slot + "” photo replaced — live now!","ok");
+    }catch(e){ toast("Upload failed","err"); }
+  };
+}
+
+/* ================= CONTENT ================= */
+function fillContent(){
+  const s = DATA.settings;
+  ["siteName","tagline","heroTitle","heroSub","announcement","promoCode","promoPct","freeShipThreshold","shipFlat","contactAddress","contactPhone","contactEmail","contactHours","footerNote"]
+    .forEach(k=>{ const el=$("s-"+k); if(el) el.value = s[k] ?? ""; });
+  $("s-announceEnabled").checked = s.announceEnabled !== false;
+}
+$("saveContent").onclick = async ()=>{
+  const s = DATA.settings;
+  ["siteName","tagline","heroTitle","heroSub","announcement","promoCode","contactAddress","contactPhone","contactEmail","contactHours","footerNote"]
+    .forEach(k=>s[k]=$("s-"+k).value);
+  s.promoPct = +$("s-promoPct").value||0;
+  s.freeShipThreshold = +$("s-freeShipThreshold").value||0;
+  s.shipFlat = +$("s-shipFlat").value||0;
+  s.announceEnabled = $("s-announceEnabled").checked;
+  try{
+    await api("/api/data",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(DATA)});
+    $('panelTitle').textContent = s.siteName + " — Control Panel";
+    renderDashboard();
+    $("contentStatus").textContent = "Published " + new Date().toLocaleTimeString();
+    toast("✅ Text & contact published!","ok");
+  }catch(e){ toast("Save failed","err"); }
+};
+
+/* ================= boot ================= */
+loadAll().catch(e=>{ toast("Could not load site data","err"); console.error(e); });
+</script>
+</body>
+</html>

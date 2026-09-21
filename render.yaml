@@ -1,0 +1,10 @@
+# One-click deploy for Render.com (free tier works — no credit card needed).
+# Just push this folder to GitHub, then in Render: New + > Web Service > select repo.
+services:
+  - type: web
+    name: maa-kali-enterprises
+    runtime: python
+    plan: free
+    buildCommand: "pip install --upgrade pip"
+    startCommand: "python server.py"
+    autoDeploy: true

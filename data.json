@@ -1,0 +1,188 @@
+{
+  "settings": {
+    "announceEnabled": true,
+    "socialTwitter": "https://twitter.com",
+    "socialFacebook": "https://facebook.com",
+    "socialInstagram": "https://instagram.com",
+    "socialLinkedin": "https://linkedin.com",
+    "contactHours": "Mon-Sat, 10am - 6pm IST",
+    "promoDesc": "Oakwood Blog Readers Save 25%",
+    "theme": {
+      "primary": "#0f2a47",
+      "accent": "#c9971c",
+      "body": "#1d2836",
+      "bg": "#f4f6f9",
+      "bannerStart": "#eef2f7",
+      "bannerEnd": "#ffffff",
+      "btnText": "#f3ecd9",
+      "cardBg": "#ffffff",
+      "headingFont": "Georgia, 'Times New Roman', serif",
+      "bodyFont": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif"
+    },
+    "siteName": "Maa Kali Enterprises",
+    "tagline": "Premium Workspace Essentials",
+    "announcement": "✦ &nbsp;Launch offer — flat <strong>10% off</strong> sitewide with code <strong>WELCOME10</strong> &nbsp;·&nbsp; Free shipping on orders over ₹4,999&nbsp; ✦",
+    "promoCode": "WELCOME10",
+    "promoPct": 10,
+    "freeShipThreshold": 4999,
+    "shipFlat": 199,
+    "contactAddress": "24 Park Street, Camac Street Area<br>Kolkata 700016, India",
+    "contactPhone": "+91 33 4080 2400<br>Mon–Sat, 10am–7pm IST",
+    "contactEmail": "hello@maakalienterprises.in<br>sales@maakalienterprises.in (bulk orders)",
+    "footerNote": "Premium workspace essentials for modern Indian businesses. Designed for comfort, built to last."
+  },
+  "products": [
+    {
+      "id": "chair",
+      "name": "Aurora Ergonomic Chair",
+      "cat": "Furniture",
+      "price": 24999,
+      "mrp": 29999,
+      "rating": 4.8,
+      "reviews": 412,
+      "badge": "Bestseller",
+      "badgeClass": "hot",
+      "img": "images/chair.jpg",
+      "desc": "Breathable mesh back, adjustable lumbar support and a synchro-tilt mechanism — built for 10-hour workdays.",
+      "specs": [
+        "Ergonomic mesh back with lumbar support",
+        "4D adjustable armrests",
+        "Class-4 gas lift · 150 kg capacity",
+        "2-year on-site warranty"
+      ]
+    },
+    {
+      "id": "desk",
+      "name": "Signature Standing Desk",
+      "cat": "Furniture",
+      "price": 34999,
+      "mrp": null,
+      "rating": 4.9,
+      "reviews": 268,
+      "badge": "New",
+      "badgeClass": "new",
+      "img": "images/desk.jpg",
+      "desc": "Solid oak top with whisper-quiet dual-motor lift. Four memory presets take you from sitting to standing in seconds.",
+      "specs": [
+        "Solid oak top · 140 × 70 cm",
+        "Dual-motor lift · 70–120 cm",
+        "4 memory presets + anti-collision",
+        "Free installation in 4 metros"
+      ]
+    },
+    {
+      "id": "lamp",
+      "name": "Halo Desk Lamp",
+      "cat": "Lighting",
+      "price": 4499,
+      "mrp": 5499,
+      "rating": 4.7,
+      "reviews": 531,
+      "badge": "Sale",
+      "badgeClass": "sale",
+      "img": "images/lamp.jpg",
+      "desc": "Brass-accented task lamp with warm-to-cool dimming and a weighted base that stays put on any desk.",
+      "specs": [
+        "2700K–6000K adjustable temperature",
+        "Stepless touch dimming",
+        "USB-C powered · 8 hr battery",
+        "360° flexible gooseneck"
+      ]
+    },
+    {
+      "id": "bag",
+      "name": "Voyager Leather Briefcase",
+      "cat": "Accessories",
+      "price": 8999,
+      "mrp": null,
+      "rating": 4.8,
+      "reviews": 194,
+      "badge": null,
+      "badgeClass": "",
+      "img": "images/bag.jpg",
+      "desc": "Full-grain leather briefcase that fits a 16-inch laptop, documents and daily essentials. Ages beautifully.",
+      "specs": [
+        "Full-grain Crazy Horse leather",
+        "Padded 16\" laptop sleeve",
+        "Solid brass fittings",
+        "Water-resistant finish"
+      ]
+    },
+    {
+      "id": "headphones",
+      "name": "Echo Wireless Headphones",
+      "cat": "Tech",
+      "price": 12999,
+      "mrp": 15999,
+      "rating": 4.6,
+      "reviews": 623,
+      "badge": "Sale",
+      "badgeClass": "sale",
+      "img": "images/headphones.jpg",
+      "desc": "Flagship noise-cancelling headphones with 40-hour battery and crystal-clear mics for back-to-back calls.",
+      "specs": [
+        "Hybrid active noise cancellation",
+        "40-hr battery · fast charge",
+        "Dual-device multipoint",
+        "1-year warranty"
+      ]
+    },
+    {
+      "id": "mugs",
+      "name": "Kiln Stoneware Mug Set (4)",
+      "cat": "Accessories",
+      "price": 1999,
+      "mrp": null,
+      "rating": 4.9,
+      "reviews": 847,
+      "badge": "Bestseller",
+      "badgeClass": "hot",
+      "img": "images/mugs.jpg",
+      "desc": "Four hand-glazed 350 ml stoneware mugs. Dishwasher, microwave and Monday-morning safe.",
+      "specs": [
+        "Set of 4 · 350 ml each",
+        "Hand-glazed speckled stoneware",
+        "Dishwasher & microwave safe",
+        "Gift-ready packaging"
+      ]
+    },
+    {
+      "id": "organizer",
+      "name": "Walnut Desk Organizer",
+      "cat": "Accessories",
+      "price": 2999,
+      "mrp": 3799,
+      "rating": 4.7,
+      "reviews": 356,
+      "badge": "Sale",
+      "badgeClass": "sale",
+      "img": "images/organizer.jpg",
+      "desc": "American black walnut organizer with slots for pens, phone, notebooks and everything that clutters genius.",
+      "specs": [
+        "Solid American black walnut",
+        "Fits A5 notebooks + phone dock",
+        "Felt-lined compartments",
+        "Hand-finished with natural oil"
+      ]
+    },
+    {
+      "id": "stand",
+      "name": "Arc Laptop Stand",
+      "cat": "Tech",
+      "price": 3499,
+      "mrp": null,
+      "rating": 4.8,
+      "reviews": 489,
+      "badge": null,
+      "badgeClass": "",
+      "img": "images/stand.jpg",
+      "desc": "CNC-milled aluminium stand that raises any laptop to eye level. Folds flat for the commute.",
+      "specs": [
+        "CNC-milled aluminium",
+        "6 angle adjustments",
+        "Fits 11\"–17\" laptops",
+        "Folds flat · 480 g"
+      ]
+    }
+  ]
+}
